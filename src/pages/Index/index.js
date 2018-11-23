@@ -35,9 +35,9 @@ function useInitialList() {
     const [list, setList] = useState([]);
 
     useEffect(() => {
-        axios.get('http://10.232.52.188:9000/api/v1')
+        axios.get('http://47.101.151.108:9000/api/v1')
         .then(res => {
-            // setList(res.data.data && res.data.data.entries || [])
+            setList(res.data.data && res.data.data.entries || [])
         });
     }, []);
 

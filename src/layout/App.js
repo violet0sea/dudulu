@@ -9,7 +9,9 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import Header from './Header';
 import Index from '@/pages/Index';
+import Css from '@/pages/Css';
 import './App.css';
 
 const About = () => <h2>About</h2>;
@@ -28,7 +30,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <AppBar position="static">
+        <Header>
           <Toolbar>
             <IconButton color="inherit" aria-label="Menu">
               <MenuIcon />
@@ -38,13 +40,13 @@ class App extends React.Component {
             </Typography>
             <Button color="inherit">Operation</Button>
           </Toolbar>
-        </AppBar>
+        </Header>
         <Router>
-          <div>
+          <main class="main">
             <Route path="/" exact component={Index} />
-            <Route path="/about/" component={About} />
+            <Route path="/css/" component={Css} />
             <Route path="/users/" component={Users} />
-          </div>
+          </main>
         </Router>
       </div>
     );
