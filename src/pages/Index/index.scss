@@ -23,19 +23,8 @@
     .flex-box {
         display: flex;
         flex-wrap: wrap;
-        width: 500px;
         padding: 10px;
         box-sizing: border-box;
         background-color: azure;
-
-        .item {
-            width: 150px;
-            height: 120px;
-            border: 1px solid salmon;
-            background-color: aquamarine;
-            flex-grow: 1;
-            flex-shrink: 1;
-            margin: 10px 10px;
-        }
     }
 }

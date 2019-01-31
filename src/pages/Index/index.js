@@ -10,10 +10,23 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 
+import Editor from '../../components/Editor';
+
 import './index.scss';
-    
+const shareVk = () => {
+    const title = 'title';
+    const desc = 'Участвуйте в празднике футбола Mi 2018 и выигрывайте призы!';
+
+    // const img = 'http://47.101.151.108/static/share1.jpg';
+    let url = `http://47.101.151.108`;
+    const img = 'http://47.101.151.108/static/' + myRef.current.value;
+    window.open(`https://vk.com/share.php?url=${url}&title=${title}&description=${desc}&image=${img}`);   
+}
+
 function Index() {
     const list = useInitialList();
+    const [html, setHtml] = useState(null);
+
     return(
         <main className="main">
             <TextField
@@ -26,6 +39,10 @@ function Index() {
             <div className="wrapper">
                 {renderList(list)}
             </div>
+            <Editor onChange={html => setHtml(html)}/>
+            <div  dangerouslySetInnerHTML={{__html: html}}></div>
+            <img src ='./share.jpg' />
+            <button onClick={shareVk}>click</button>
             
         </main>
     )
@@ -33,6 +50,7 @@ function Index() {
 
 function useInitialList() {
     const [list, setList] = useState([]);
+
 
     useEffect(() => {
         axios.get('http://47.101.151.108:9000/api/v1')
@@ -44,18 +62,14 @@ function useInitialList() {
     return list;
 }
 
-function renderList(list) {
+const myRef = React.createRef();
 
+function renderList(list) {
+    
     if(!list.length) {
         return (
             <div className="flex-box">
-                <div className="item">1 汉字212adsadsad</div>
-                <div className="item">2 Contemplative ReptileContemplative Reptile</div>
-                <div className="item">3 Contemplative ReptileContemplative ReptileContemplative Reptile</div>
-                <div className="item">4 Contemplative ReptileContemplative Reptile</div>
-                <div className="item">5 Contemplative ReptileContemplative Reptile</div>
-                <div className="item">6 Contemplative ReptileContemplative Reptile</div>
-                <div className="item">7 Contemplative ReptileContemplative Reptile</div>
+                <input ref={myRef}/>
             </div>
         );
     }
