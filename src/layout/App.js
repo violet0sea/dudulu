@@ -39,6 +39,7 @@ class App extends React.Component {
               News
             </Typography>
             <Button color="inherit">Operation</Button>
+            <input type="file" accept="image/*" capture="microphone"></input>
           </Toolbar>
         </Header>
         <Router>
