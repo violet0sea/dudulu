@@ -9,7 +9,7 @@ import CardMedia from "@material-ui/core/CardMedia"
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 import AddIcon from "@material-ui/icons/Add"
-import axios from "axios"
+import Loading from "../../components/Loading"
 
 import Editor from "../../components/Editor"
 import FullScreenDialog from "../../components/FullScreenDialog"
@@ -38,6 +38,7 @@ function Index() {
         placeholder="发现"
         fullWidth
       /> */}
+      <Loading />
       <div className="wrapper">{renderList(list)}</div>
       <div dangerouslySetInnerHTML={{ __html: html }} />
       <Button
@@ -64,19 +65,17 @@ function Index() {
 }
 
 function useInitialList() {
-  const [list, setList] = useState([
-    {
-      id: 1,
-      title: "A Complete Guide to useEffect",
-      date: new Date().getTime()
-    }
-  ])
+  let len = 10
+  let list1 = []
 
-  useEffect(() => {
-    axios.get("http://47.101.151.108:9000/api/v1").then(res => {
-      setList((res.data.data && res.data.data.entries) || [])
+  while (len--) {
+    list1.push({
+      id: len,
+      title: "guide",
+      date: new Date().getTime()
     })
-  }, [])
+  }
+  const [list, setList] = useState(list1)
 
   return list
 }
@@ -90,24 +89,10 @@ function renderList(list) {
 
   return list.map(d => {
     return (
-      <Card className="list-container" key={d.id}>
-        <CardActionArea>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {d.title}
-            </Typography>
-            <Typography component="p">{d.rating}</Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            Share
-          </Button>
-          <Button size="small" color="primary">
-            Learn More
-          </Button>
-        </CardActions>
-      </Card>
+      <div className="box-shadow-gray list-container" key={d.id}>
+        <h3>{d.title}</h3>
+        <p>{new Date(d.date).toLocaleString()}</p>
+      </div>
     )
   })
 }

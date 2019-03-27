@@ -22,7 +22,9 @@ function FullScreenDialog(props) {
   const { open, closeDialog, saveText, children } = props
 
   function handleSave() {
-    saveText()
+    if (typeof saveText == "function") {
+      saveText()
+    }
   }
 
   function handleClose() {
