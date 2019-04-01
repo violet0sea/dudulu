@@ -14,8 +14,8 @@ import Index from '@/pages/Index';
 import Css from '@/pages/Css';
 import './App.css';
 
-const About = () => <h2>About</h2>;
-const Users = () => <h2>Users</h2>;
+// const About = () => <h2>About</h2>;
+// const Users = () => <h2>Users</h2>;
 
 const styles = (theme) =>
   createStyles({
@@ -46,7 +46,7 @@ class App extends React.Component {
           <main class="main">
             <Route path="/" exact component={Index} />
             <Route path="/css/" component={Css} />
-            <Route path="/users/" component={Users} />
+            {/* <Route path="/users/" component={Users} /> */}
           </main>
         </Router>
       </div>
