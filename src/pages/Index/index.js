@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from "react";
-
-import TextField from "@material-ui/core/TextField";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import AddIcon from "@material-ui/icons/Add";
+import Loading from "../../components/Loading";
 
 import Editor from "../../components/Editor";
+import FullScreenDialog from "../../components/FullScreenDialog";
 import fetch from "@/utils/fetch";
 import "./index.scss";
 
 function Index() {
   const list = useInitialList();
   const [html, setHtml] = useState(null);
-
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     const requestBody = {
       query: `query {
@@ -30,12 +25,12 @@ function Index() {
             `
     };
 
-    fetch({
-      url: "/graphql",
-      data: JSON.stringify(requestBody)
-    }).then(result => {
-      console.log(result);
-    });
+    // fetch({
+    //   url: "/graphql",
+    //   data: JSON.stringify(requestBody)
+    // }).then(result => {
+    //   console.log(result);
+    // });
 
     fetch({
       url: "/graphql",
@@ -45,10 +40,15 @@ function Index() {
       }
     }).then(res => console.log(res));
   }, []);
-
+  function openTextEditor() {
+    setOpen(true);
+  }
+  function submitText() {
+    setHtml();
+  }
   return (
     <main className="main">
-      <TextField
+      {/* <TextField
         id="outlined-name"
         margin="normal"
         variant="outlined"
@@ -74,45 +74,62 @@ function useInitialList() {
   // }, []);
 
   return list;
+      /> */}
+      <Loading />
+      <div className="wrapper">{renderList(list)}</div>
+      <div dangerouslySetInnerHTML={{ __html: html }} />
+      <Button
+        className="round-button fixed-button"
+        variant="contained"
+        color="primary"
+        onClick={openTextEditor}
+      >
+        <AddIcon />
+      </Button>
+      <FullScreenDialog
+        open={open}
+        saveText={submitText}
+        closeDialog={() => {
+          setOpen(false);
+        }}
+      >
+        <section className="text-editor">
+          <Editor onChange={html => setHtml(html)} />
+        </section>
+      </FullScreenDialog>
+    </main>
+  );
+}
+
+function useInitialList() {
+  let len = 10;
+  let list1 = [];
+
+  while (len--) {
+    list1.push({
+      id: len,
+      title: "guide",
+      date: new Date().getTime()
+    });
+  }
+  const [list, setList] = useState(list1);
+
+  return list;
 }
 
 const myRef = React.createRef();
 
 function renderList(list) {
   if (!list.length) {
-    return (
-      <div className="flex-box">
-        <input ref={myRef} />
-      </div>
-    );
+    return <div className="flex-box">Oops</div>;
   }
 
   return list.map(d => {
     return (
-      <Card className="list-container">
-        <CardActionArea>
-          <CardMedia
-            className="list-image"
-            component="img"
-            image={d.images.small}
-            title="Contemplative Reptile"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {d.title}
-            </Typography>
-            <Typography component="p">{d.rating}</Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            Share
-          </Button>
-          <Button size="small" color="primary">
-            Learn More
-          </Button>
-        </CardActions>
-      </Card>
+      <div className="box-shadow-gray list-container" key={d.id}>
+        <h3>{d.title}</h3>
+        <p>{new Date(d.date).toLocaleString()}</p>
+      </div>
     );
   });
 }
