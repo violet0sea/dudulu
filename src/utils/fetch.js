@@ -1,34 +1,33 @@
-import axios from "axios";
+import axios from "axios"
 
-import { baseUrl } from "./constant";
+import { baseUrl } from "./constant"
 
 async function fetch(params) {
-  const { method = "post", url, data } = params;
+  const { method = "post", url, data } = params
 
-  let response;
+  let response
   let config = {
     method,
     url,
     baseURL: baseUrl,
     headers: {
       "Content-Type": "application/json"
-    },
-    timeout: 3000
-  };
+    }
+  }
 
   if (method === "post" || method === "put") {
-    config.data = data;
+    config.data = data
   } else {
-    config.params = data;
+    config.params = data
   }
   try {
-    response = await axios(config);
+    response = await axios(config)
   } catch (err) {
-    console.error(err);
+    console.error(111, err, performance.now())
   }
 
-  console.log(response);
-  return response.data;
+  console.log(response)
+  return response.data
 }
 
-export default fetch;
+export default fetch

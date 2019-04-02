@@ -1,27 +1,28 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import withStyles from "@material-ui/core/styles/withStyles";
-import createStyles from "@material-ui/core/styles/createStyles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Drawer from "@material-ui/core/Drawer";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import React, { useState } from "react"
+import { BrowserRouter as Router, Route } from "react-router-dom"
+import withStyles from "@material-ui/core/styles/withStyles"
+import createStyles from "@material-ui/core/styles/createStyles"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Drawer from "@material-ui/core/Drawer"
+import IconButton from "@material-ui/core/IconButton"
+import MenuIcon from "@material-ui/icons/Menu"
+import List from "@material-ui/core/List"
+import Divider from "@material-ui/core/Divider"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemIcon from "@material-ui/core/ListItemIcon"
+import ListItemText from "@material-ui/core/ListItemText"
+import InboxIcon from "@material-ui/icons/MoveToInbox"
+import MailIcon from "@material-ui/icons/Mail"
 
-import Header from "./Header";
-import Index from "@/pages/Index";
-import Css from "@/pages/Css";
-import "./App.css";
+import Header from "./Header"
+import Index from "@/pages/Index"
+import Css from "@/pages/Css"
+import Article from "@/pages/Article"
+import "./App.css"
 
-const About = () => <h2>About</h2>;
-const Users = () => <h2>Users</h2>;
+const About = () => <h2>About</h2>
+const Users = () => <h2>Users</h2>
 
 const styles = theme =>
   createStyles({
@@ -29,20 +30,20 @@ const styles = theme =>
       textAlign: "center",
       paddingTop: theme.spacing.unit * 20
     }
-  });
+  })
 
 class App extends React.Component {
   state = {
     open: false
-  };
+  }
 
   toggleDrawer = open => () => {
     this.setState({
       open
-    });
-  };
+    })
+  }
   render() {
-    const { open } = this.state;
+    const { open } = this.state
     const sideList = (
       <div>
         <List>
@@ -67,7 +68,7 @@ class App extends React.Component {
           ))}
         </List>
       </div>
-    );
+    )
     return (
       <div className="App">
         <Header>
@@ -99,12 +100,13 @@ class App extends React.Component {
           <main className="main">
             <Route path="/" exact component={Index} />
             <Route path="/css/" component={Css} />
+            <Route path="/article/:id" component={Article} />
             {/* <Route path="/users/" component={Users} /> */}
           </main>
         </Router>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

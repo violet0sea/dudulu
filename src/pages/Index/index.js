@@ -1,50 +1,66 @@
-import React, { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import Loading from "../../components/Loading";
+import React, { useState, useEffect } from "react"
+import Button from "@material-ui/core/Button"
+import AddIcon from "@material-ui/icons/Add"
+import { withRouter } from "react-router-dom"
 
-import Editor from "../../components/Editor";
-import FullScreenDialog from "../../components/FullScreenDialog";
-import fetch from "@/utils/fetch";
-import "./index.scss";
+import Loading from "../../components/Loading"
+import Editor from "../../components/Editor"
+import FullScreenDialog from "../../components/FullScreenDialog"
+import fetch from "@/utils/fetch"
+import "./index.scss"
 
 function Index() {
-  const list = useInitialList();
-  const [html, setHtml] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [html, setHtml] = useState(null)
+  const [open, setOpen] = useState(false)
+  const [articles, setArticles] = useState([])
   useEffect(() => {
     const requestBody = {
       query: `query {
-                    events {
-                        _id
-                        title
-                        description
-                        date
-                    }
+                homeList {
+                  _id
+                  title
+                  content
+                  createdAt
                 }
+              }
             `
-    };
-
-    // fetch({
-    //   url: "/graphql",
-    //   data: JSON.stringify(requestBody)
-    // }).then(result => {
-    //   console.log(result);
-    // });
+    }
 
     fetch({
       url: "/graphql",
-      method: "get",
-      data: {
-        query: "{hello}"
-      }
-    }).then(res => console.log(res));
-  }, []);
+      data: JSON.stringify(requestBody)
+    }).then(result => {
+      setArticles(result.data.homeList)
+    })
+  }, [])
   function openTextEditor() {
-    setOpen(true);
+    setOpen(true)
   }
   function submitText() {
-    setHtml();
+    const requestBody = {
+      query: `mutation createArticle($title: String!, $content: String!) {
+                createArticle(articleInput: {title: $title, content: $content}) {
+                  title
+                  content
+                }
+              }
+            `,
+      variables: {
+        title: "React",
+        content: html
+      }
+    }
+
+    fetch({
+      url: "/graphql",
+      data: JSON.stringify(requestBody)
+    }).then(result => {
+      console.log(result)
+    })
+  }
+
+  if (articles.length === 0) {
+    return <Loading />
   }
   return (
     <main className="main">
@@ -63,20 +79,9 @@ function Index() {
   );
 }
 
-function useInitialList() {
-  const [list, setList] = useState([]);
-
-  // useEffect(() => {
-  //     axios.get('http://47.101.151.108:9000/api/v1')
-  //     .then(res => {
-  //         setList(res.data.data && res.data.data.entries || [])
-  //     });
-  // }, []);
-
-  return list;
       /> */}
-      <Loading />
-      <div className="wrapper">{renderList(list)}</div>
+
+      <div className="wrapper">{renderList({ list: articles })}</div>
       <div dangerouslySetInnerHTML={{ __html: html }} />
       <Button
         className="round-button fixed-button"
@@ -90,7 +95,7 @@ function useInitialList() {
         open={open}
         saveText={submitText}
         closeDialog={() => {
-          setOpen(false);
+          setOpen(false)
         }}
       >
         <section className="text-editor">
@@ -98,40 +103,30 @@ function useInitialList() {
         </section>
       </FullScreenDialog>
     </main>
-  );
+  )
 }
 
-function useInitialList() {
-  let len = 10;
-  let list1 = [];
-
-  while (len--) {
-    list1.push({
-      id: len,
-      title: "guide",
-      date: new Date().getTime()
-    });
-  }
-  const [list, setList] = useState(list1);
-
-  return list;
+function gotoDetail(history, id) {
+  return () => history.push(`/article/${id}`)
 }
 
-const myRef = React.createRef();
-
-function renderList(list) {
+const renderList = withRouter(function(props) {
+  const { history, list } = props
   if (!list.length) {
-    return <div className="flex-box">Oops</div>;
+    return <div className="flex-box">Oops, can not get any data</div>
   }
-
   return list.map(d => {
     return (
-      <div className="box-shadow-gray list-container" key={d.id}>
+      <div
+        className="box-shadow-gray list-container"
+        key={d._id}
+        onClick={gotoDetail(history, d._id)}
+      >
         <h3>{d.title}</h3>
-        <p>{new Date(d.date).toLocaleString()}</p>
+        <p>{new Date(d.createdAt).toLocaleString()}</p>
       </div>
-    );
-  });
-}
+    )
+  })
+})
 
-export default Index;
+export default Index
