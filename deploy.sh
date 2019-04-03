@@ -20,5 +20,5 @@ yarn build
 ssh $host rm -rf ${remoteDir}/*
 
 # echo -e "${green}3. 传输本地静态文件到远端"
-## jen oopp
+
 scp -r $localDir $host:$remoteDir
